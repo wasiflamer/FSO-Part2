@@ -2,11 +2,18 @@ const Course = ({ course }) => {
   // getting course
   // now format it below
 
-  console.log(course.name);
+  var course_ids = course.parts.map((x) => x.id);
+  var course_names = course.parts.map((x) => x.name);
+  var course_exercises = course.parts.map((x) => x.exercises);
+
+  console.log(course_ids);
+  console.log(course_names);
+  console.log(course_exercises);
 
   return (
     <>
-      <Header course_name={course.name} />;
+      <Header course_name={course.name} />
+      <Content course={course} />
     </>
   );
 };
