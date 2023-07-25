@@ -1,19 +1,10 @@
 const Course = ({ course }) => {
-  // getting course
-  // now format it below
-
-  var course_ids = course.parts.map((x) => x.id);
-  var course_names = course.parts.map((x) => x.name);
-  var course_exercises = course.parts.map((x) => x.exercises);
-
-  console.log(course_ids);
-  console.log(course_names);
-  console.log(course_exercises);
-
+  
   return (
     <>
       <Header course_name={course.name} />
-      <Content course={course} />
+      <Content course={course}/>
+      <Total course={course}/>
     </>
   );
 };
@@ -22,47 +13,27 @@ const Header = ({ course_name }) => {
   return <h1> {course_name} </h1>;
 };
 
-const Part = (props) => {
+const Part = ({name,exe, id }) => {
   return (
-    <p>
-      {props.name} {props.exe}
-    </p>
+    <li key={id}>
+      {name} {exe}
+    </li>
   );
 };
 
-const Content = (props) => {
-  return (
-    <>
-      <Part
-        name={props.course["parts"][0].name}
-        exe={props.course["parts"][0].exercises}
-      />
-      <Part
-        name={props.course["parts"][1].name}
-        exe={props.course["parts"][1].exercises}
-      />
-      <Part
-        name={props.course["parts"][2].name}
-        exe={props.course["parts"][2].exercises}
-      />
-    </>
-  );
+const Content = ({course}) => {
+
+    return course.parts.map(x => <Part key={x.id} name={x.name} exe={x.exercises}/>);
+
 };
 
-const Total = (props) => {
-  return (
-    <>
-      <p>
-        Total Excercises{" "}
-        {props.course["parts"][0].exercises +
-          props.course["parts"][1].exercises +
-          props.course["parts"][2].exercises}{" "}
-      </p>
-    </>
-  );
+const Total = ({course}) => {
+
+
 };
 
 const App = () => {
+  
   const course = {
     id: 1,
     name: "Half Stack application development",
@@ -82,6 +53,17 @@ const App = () => {
         exercises: 14,
         id: 3,
       },
+      {
+        name: "Redux",
+        exercises: 4,
+        id: 4,
+      },
+       {
+        name: "Mulum",
+        exercises: 10,
+        id: 5,
+      },
+      
     ],
   };
 
