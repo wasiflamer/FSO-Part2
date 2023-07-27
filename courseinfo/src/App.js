@@ -1,33 +1,17 @@
 const Course = ({ courses }) => {
-  var Column_Heading = ["sd", "rim jon", "kkaf", "awwz"];
-  var data = ["rdf", "kksdff", "dsfwz"];
-  var Column_footer = ["rdsfn", "kdsf", "adf"];
 
-  return (
-    <>
-      <table>
-        <thead>
-          <tr>
-            <th>{Column_Headin}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{data}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>{Column_footer}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </>
+  return ( courses.map((x) =>  
+     <li key={x.id}>
+        <Header  courses ={x.name}/>
+        <Content courses ={x.parts}/>
+        <Total   courses ={x.parts}/>
+      </li> 
+    )
   );
 };
 
-const Header = ({ course_name }) => {
-  return <h1> {course_name} </h1>;
+const Header = ({ courses }) => {
+  return <h1> {courses} </h1>;
 };
 
 const Part = ({ name, exe, id }) => {
@@ -38,14 +22,14 @@ const Part = ({ name, exe, id }) => {
   );
 };
 
-const Content = ({ course }) => {
-  return course.parts.map((x) => (
+const Content = ({ courses }) => {
+  return courses.map((x) => (
     <Part key={x.id} name={x.name} exe={x.exercises} />
   ));
 };
 
-const Total = ({ course }) => {
-  let total = course.parts.reduce((sum, x) => {
+const Total = ({ courses }) => {
+  let total = courses.reduce((sum, x) => {
     return sum + x.exercises;
   }, 0);
 
