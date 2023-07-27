@@ -1,3 +1,6 @@
+
+import './style.css'
+
 const Course = ({ courses }) => {
   return ( courses.map((x) =>    
       <li key={x.id} >
@@ -18,7 +21,7 @@ const Header = ({ courses }) => {
 const Part = ({ name, exe, id }) => {
   return (
     <li key={id}>
-      {name} {exe}
+     <p>{name} {exe}</p> 
     </li>
   );
 };
