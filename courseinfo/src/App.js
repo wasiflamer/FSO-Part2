@@ -1,11 +1,12 @@
 const Course = ({ courses }) => {
-
-  return ( courses.map((x) =>  
-     <li key={x.id}>
-        <Header  courses ={x.name}/>
+  return ( courses.map((x) =>    
+      <li key={x.id} >
+        <ul>
+        <Header  courses ={x.name} />
         <Content courses ={x.parts}/>
         <Total   courses ={x.parts}/>
-      </li> 
+        </ul>
+      </li>
     )
   );
 };
