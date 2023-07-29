@@ -12,7 +12,7 @@ const App = () => {
 
     var answer = persons.reduce((name, person) => {
     if (name) {
-    return true; 
+    return true;
     }
     return person.name === event.target.value;
     }, false);
