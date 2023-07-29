@@ -3,27 +3,27 @@ import { useState } from 'react'
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas' },
-    { name: 'Waseem Raza' },
   ])
   const [newName, setNewName] = useState('')
 
-
   const handleInputChange = (event) => {
     setNewName(event.target.value)
-    console.log(newName)
   };
 
-  const handleInputsubmitted = () => {
-    setPersons([persons.push({name:newName})])
+  const handleInputsubmitted = (event) => {
+   
+    event.preventDefault()
+    setPersons([...persons, { name: newName },])
+    setNewName('');
     
   };
 
   return (
     <>
       <h2>Phonebook</h2>
-      <form onSubmit={handleInputsubmitted} method='POST'>
+      <form onSubmit={handleInputsubmitted}>
         <div>
-          name: <input value={newName} onChange={handleInputChange}/>
+          name: <input value={newName} onChange={handleInputChange} />
         </div>
         <div>
           <button type="submit">add</button>
