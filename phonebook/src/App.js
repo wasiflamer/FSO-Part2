@@ -2,16 +2,23 @@ import { useState } from 'react'
 
 const App = () => {
 
+
+  function capitalizeFLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
     { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
     { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 },
+    { name: 'Waseem', number: '39-23-64243122', id: 5 }
   ])
 
   const [newName,    setNewName]     = useState('')
   const [newNumber,  setnewNumber]   = useState('')
-  const [searchTerm, setsearchTerm]  = useState('')
+  var [searchTerm, setsearchTerm]  = useState('')
 
    const handleChangeName = (event) => {
    
@@ -59,6 +66,7 @@ const App = () => {
 
   const ShowResults = () => {
 
+
     if (searchTerm === '') {
        return (
           persons.map((x) => {      
@@ -68,10 +76,17 @@ const App = () => {
     } 
     else
     {
-      // 
-      
-      
 
+      let new_map = persons.filter((x) => {      
+      return x.name.includes(capitalizeFLetter(searchTerm))
+      },
+      );
+
+      return (
+        new_map.map((x) => {      
+        return <li key={x.name}> {x.name} {x.number} </li>
+      })
+    );
 
     }
   }
@@ -107,3 +122,4 @@ const App = () => {
 }
 
 export default App
+
