@@ -7,7 +7,24 @@ const App = () => {
   const [newName, setNewName] = useState('')
 
   const handleInputChange = (event) => {
+   
     setNewName(event.target.value)
+
+    var answer = persons.reduce((name, person) => {
+    if (name) {
+    return true; 
+    }
+    return person.name === event.target.value;
+    }, false);
+
+    if ( answer === true)
+    {
+      setTimeout(() => {
+        return alert(`${event.target.value} is already added to phonebook`)
+    }, 100);
+  
+    }
+   
   };
 
   const handleInputsubmitted = (event) => {
