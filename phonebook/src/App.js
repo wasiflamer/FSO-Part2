@@ -9,10 +9,11 @@ const App = () => {
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ])
 
-  const [newName,   setNewName]   = useState('')
-  const [newNumber, setnewNumber] = useState('')
+  const [newName,    setNewName]     = useState('')
+  const [newNumber,  setnewNumber]   = useState('')
+  const [searchTerm, setsearchTerm]  = useState('')
 
-  const handleChangeName = (event) => {
+   const handleChangeName = (event) => {
    
     setNewName(event.target.value)
 
@@ -31,11 +32,16 @@ const App = () => {
   
     }
    
-  };
+  }
 
    const handleChangeNumber = (event) => {
     setnewNumber(event.target.value)
   }
+
+   const handleChangesearchTerm = (event) => {
+    setsearchTerm(event.target.value)
+  }
+
 
   const handleSubmitted = (event) => {
 
@@ -49,21 +55,41 @@ const App = () => {
     setNewName('');
     setnewNumber('');
 
-  };
+  }
+
+  const ShowResults = () => {
+
+      return (
+          persons.map((x) => {      
+          return <li key={x.name}> {x.name} {x.number} </li>
+        })
+      );
+    
+  }
+
+  const Searchbar = () => {
+    return (
+    <>  
+      filter shown with <input value={{searchTerm}} onChange={handleChangesearchTerm}/> 
+    </> 
+    );
+
+  }
 
  
   return (
     <>
       <h2>Phonebook</h2>
+      <Searchbar/>
 
       <form onSubmit={handleSubmitted}>
          
           <div>
-            Name <input value={newName} onChange={handleChangeName} />
+            Name <input value={newName} onChange={handleChangeName}/>
           </div>
 
           <div>
-            Number <input type='number' value={newNumber} onChange={handleChangeNumber} />
+            Number <input type='number' value={newNumber} onChange={handleChangeNumber}/>
           </div>
           
         <div>
@@ -71,9 +97,9 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map((x) => {      
-        return <li key={x.name}> {x.name} {x.number}  </li>
-      })}
+
+      <ShowResults  />
+
     </>
   )
 }
