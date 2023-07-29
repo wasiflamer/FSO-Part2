@@ -38,7 +38,7 @@ const App = () => {
     setnewNumber(event.target.value)
   }
 
-   const handleChangesearchTerm = (event) => {
+   const handleSearchTerm = (event) => {
     setsearchTerm(event.target.value)
   }
 
@@ -59,28 +59,30 @@ const App = () => {
 
   const ShowResults = () => {
 
-      return (
+    if (searchTerm === '') {
+       return (
           persons.map((x) => {      
           return <li key={x.name}> {x.name} {x.number} </li>
         })
       );
-    
+    } 
+    else
+    {
+      // 
+      
+      
+
+
+    }
   }
 
-  const Searchbar = () => {
-    return (
-    <>  
-      filter shown with <input value={{searchTerm}} onChange={handleChangesearchTerm}/> 
-    </> 
-    );
-
-  }
 
  
   return (
     <>
       <h2>Phonebook</h2>
-      <Searchbar/>
+     
+      filter shown with <input value={searchTerm} onChange={handleSearchTerm}/> 
 
       <form onSubmit={handleSubmitted}>
          
