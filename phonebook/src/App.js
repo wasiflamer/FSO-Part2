@@ -1,12 +1,65 @@
 import { useState } from 'react'
 
-const App = () => {
-
-
-  function capitalizeFLetter(string) {
+ function capitalizeFLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+const ShowResults = ({searchTerm , persons}) => {
+
+    if (searchTerm === '') {
+       return (
+          persons.map((x) => {      
+          return <li key={x.name}> {x.name} {x.number} </li>
+        })
+      );
+    } 
+    else
+    {
+
+      let new_map = persons.filter((x) => {      
+      return x.name.includes(capitalizeFLetter(searchTerm))
+      },
+      );
+
+      return (
+        new_map.map((x) => {      
+        return <li key={x.name}> {x.name} {x.number} </li>
+      })
+    );
+
+    }
+}
+const Addpersons = ({ handleSubmitted, newName, newNumber, handleChangeName, handleChangeNumber }) => {
+    return (
+      <form onSubmit={handleSubmitted}>
+          <div>
+            Name <input type='text' value={newName} onChange={handleChangeName}/>
+          </div>
+          <div>
+            Number <input type='number' value={newNumber} onChange={handleChangeNumber}/>
+          </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+    );
+}
+
+const SearchBar = ({searchTerm,handleSearchTerm}) => {
+  return(
+    <p>filter shown with <input value={searchTerm} onChange={handleSearchTerm}/> </p>
+  );
+}
+
+
+const Heading = ({label}) => {
+  return (
+    <h2>{label}</h2>
+  );
+
+}
+
+const App = () => {
 
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -16,9 +69,9 @@ const App = () => {
     { name: 'Waseem', number: '39-23-64243122', id: 5 }
   ])
 
-  const [newName,    setNewName]     = useState('')
-  const [newNumber,  setnewNumber]   = useState('')
-  var [searchTerm, setsearchTerm]  = useState('')
+   const [newName,    setNewName]     = useState('')
+   const [newNumber,  setnewNumber]   = useState('')
+   const [searchTerm, setsearchTerm]  = useState('')
 
    const handleChangeName = (event) => {
    
@@ -49,9 +102,7 @@ const App = () => {
     setsearchTerm(event.target.value)
   }
 
-
-  const handleSubmitted = (event) => {
-
+   const handleSubmitted = (event) => {
     event.preventDefault()
 
     if (newName === '' || newNumber === '' ) {
@@ -61,65 +112,17 @@ const App = () => {
     setPersons([...persons, { name: newName, number : newNumber },])
     setNewName('');
     setnewNumber('');
-
   }
-
-  const ShowResults = () => {
-
-
-    if (searchTerm === '') {
-       return (
-          persons.map((x) => {      
-          return <li key={x.name}> {x.name} {x.number} </li>
-        })
-      );
-    } 
-    else
-    {
-
-      let new_map = persons.filter((x) => {      
-      return x.name.includes(capitalizeFLetter(searchTerm))
-      },
-      );
-
-      return (
-        new_map.map((x) => {      
-        return <li key={x.name}> {x.name} {x.number} </li>
-      })
-    );
-
-    }
-  }
-
-
- 
+  
   return (
     <>
-      <h2>Phonebook</h2>
-     
-      filter shown with <input value={searchTerm} onChange={handleSearchTerm}/> 
-
-      <form onSubmit={handleSubmitted}>
-         
-          <div>
-            Name <input value={newName} onChange={handleChangeName}/>
-          </div>
-
-          <div>
-            Number <input type='number' value={newNumber} onChange={handleChangeNumber}/>
-          </div>
-          
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-
-      <ShowResults  />
-
+      <Heading label={'PhoneBook'}/>
+      <SearchBar searchTerm={searchTerm} handleSearchTerm={handleSearchTerm}/>
+      <Addpersons handleChangeName={handleChangeName} handleChangeNumber={handleChangeNumber} handleSubmitted={handleSubmitted} newName={newName} newNumber={newNumber}  />
+      <Heading label={'Numbers'}/>
+      <ShowResults searchTerm={searchTerm} persons={persons} />
     </>
   )
 }
-
 export default App
 
