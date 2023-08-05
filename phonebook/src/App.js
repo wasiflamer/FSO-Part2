@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function capitalizeFLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -111,6 +112,12 @@ const App = () => {
     setNewName('');
     setnewNumber('');
   };
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
 
   return (
     <>
