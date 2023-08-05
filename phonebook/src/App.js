@@ -9,8 +9,7 @@ const ShowResults = ({ searchTerm, persons }) => {
     return persons.map((x) => {
       return (
         <li key={x.name}>
-          {' '}
-          {x.name} {x.number}{' '}
+          {x.name} {x.number}
         </li>
       );
     });
@@ -22,8 +21,7 @@ const ShowResults = ({ searchTerm, persons }) => {
     return new_map.map((x) => {
       return (
         <li key={x.name}>
-          {' '}
-          {x.name} {x.number}{' '}
+          {x.name} {x.number}
         </li>
       );
     });
@@ -42,7 +40,7 @@ const Addpersons = ({
         Name <input type='text' value={newName} onChange={handleChangeName} />
       </div>
       <div>
-        Number{' '}
+        Number
         <input type='number' value={newNumber} onChange={handleChangeNumber} />
       </div>
       <div>
