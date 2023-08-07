@@ -29,6 +29,7 @@ const ShowResults = ({ searchTerm, persons }) => {
     });
   }
 };
+
 const Addpersons = ({
   handleSubmitted,
   newName,
@@ -65,14 +66,7 @@ const Heading = ({ label }) => {
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 },
-    { name: 'Local', number: '39-23-64243122', id: 5 },
-  ]);
-
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setnewNumber] = useState('');
   const [searchTerm, setsearchTerm] = useState('');
@@ -109,11 +103,22 @@ const App = () => {
       return alert('Name or Number cannot be empty ! ');
     }
 
+    // call the services here to add the new object to the setpersons state and cause a app component refresh
+
+    var newObject = {
+      name: newName,
+      number: newNumber,  
+    };
+
+    services.create(newObject).then();
+
     setPersons([...persons, { name: newName, number: newNumber }]);
+
     setNewName('');
     setnewNumber('');
   };
 
+  // picking initial data
   useEffect(() => {
     services.getAll().then((data) => {
       setPersons(data);
