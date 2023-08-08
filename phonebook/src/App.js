@@ -6,13 +6,26 @@ function capitalizeFLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const ShowResults = ({ searchTerm, persons, handleDelete }) => {
+// handle delete
+const RemoveButton = ({ id }) => {
+  // first confirm if sure
+  // how to refresh the state of persons to reflect change
+
+  const handleclick = () => {
+    console.log(`this is the id to be deleted ${id}`);
+    services.remove(id).then();
+  };
+
+  return <button onClick={handleclick}>delete</button>;
+};
+
+const ShowResults = ({ searchTerm, persons }) => {
   if (searchTerm === '') {
     return persons.map((x) => {
       return (
         <li key={x.name}>
           {x.name} {x.number}
-          <button onClick={() => handleDelete(6)}>delete</button>
+          <RemoveButton id={x.id} />
         </li>
       );
     });
@@ -119,12 +132,6 @@ const App = () => {
     setnewNumber('');
   };
 
-  // handle delete
-  const handleDelete = ({ id }) => {
-    console.log(`this is the id to be deleted ${id}`);
-    services.remove(id).then();
-  };
-
   // picking initial data
   useEffect(() => {
     services.getAll().then((data) => {
@@ -147,7 +154,7 @@ const App = () => {
       <ShowResults
         searchTerm={searchTerm}
         persons={persons}
-        handleDelete={handleDelete}
+        setPersons={setPersons}
       />
     </>
   );
