@@ -6,26 +6,24 @@ function capitalizeFLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// handle delete
-const RemoveButton = ({ id }) => {
-  // first confirm if sure
-  // how to refresh the state of persons to reflect change
-
+const RemoveButton = ({ id, persons, setPersons }) => {
   const handleclick = () => {
-    console.log(`this is the id to be deleted ${id}`);
-    services.remove(id).then();
+    // Call the remove function and update state after removal
+    services.remove(id).then(() => {
+      setPersons(persons.filter((person) => person.id !== id));
+    });
   };
 
   return <button onClick={handleclick}>delete</button>;
 };
 
-const ShowResults = ({ searchTerm, persons }) => {
+const ShowResults = ({ searchTerm, persons, setPersons }) => {
   if (searchTerm === '') {
     return persons.map((x) => {
       return (
         <li key={x.name}>
           {x.name} {x.number}
-          <RemoveButton id={x.id} />
+          <RemoveButton id={x.id} persons={persons} setPersons={setPersons} />
         </li>
       );
     });
@@ -38,6 +36,7 @@ const ShowResults = ({ searchTerm, persons }) => {
       return (
         <li key={x.name}>
           {x.name} {x.number}
+          <RemoveButton id={x.id} persons={persons} setPersons={setPersons} />
         </li>
       );
     });
@@ -118,15 +117,19 @@ const App = () => {
     }
 
     // call the services here to add the new object to the setpersons state and cause a app component refresh
-
     var newObject = {
-      name: newName,
+      name: capitalizeFLetter(newName),
       number: newNumber,
     };
 
-    services.create(newObject).then();
-
-    setPersons([...persons, { name: newName, number: newNumber }]);
+    services
+      .create(newObject)
+      .then((Response) =>
+        setPersons([
+          ...persons,
+          { name: Response.name, number: Response.number, id: Response.id },
+        ])
+      );
 
     setNewName('');
     setnewNumber('');
