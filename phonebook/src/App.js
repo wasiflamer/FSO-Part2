@@ -8,10 +8,18 @@ function capitalizeFLetter(string) {
 
 const RemoveButton = ({ id, persons, setPersons }) => {
   const handleclick = () => {
-    // Call the remove function and update state after removal
-    services.remove(id).then(() => {
-      setPersons(persons.filter((person) => person.id !== id));
-    });
+    var currentObject = persons.filter((person) => person.id === id);
+
+    var promptValue = window.confirm(
+      `you sure you want to delete ${currentObject[0].name} ? `
+    );
+
+    if (promptValue === true) {
+      // Call the remove function and update state after removal
+      services.remove(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
   };
 
   return <button onClick={handleclick}>delete</button>;
