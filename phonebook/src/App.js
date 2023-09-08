@@ -124,6 +124,23 @@ const App = () => {
       return alert('Name or Number cannot be empty ! ');
     }
 
+    // if new name == a persons name in database then ask for repalce else dont ask for replace and add the person already
+
+    var answer = persons.reduce((name, person) => {
+      if (name) {
+        return true;
+      }
+      return person.name === event.target.value;
+    }, false);
+
+    console.log(``);
+
+    if (answer === true) {
+      return window.confirm(
+        `${event.target.value} is already added to phonebook you sure you want to replace with the new number ? `
+      );
+    }
+
     // call the services here to add the new object to the setpersons state and cause a app component refresh
     var newObject = {
       name: capitalizeFLetter(newName),
