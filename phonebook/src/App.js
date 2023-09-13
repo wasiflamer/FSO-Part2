@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import services from './services/services';
+import services from "./services/services";
 
 function capitalizeFLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -26,7 +26,7 @@ const RemoveButton = ({ id, persons, setPersons }) => {
 };
 
 const ShowResults = ({ searchTerm, persons, setPersons }) => {
-  if (searchTerm === '') {
+  if (searchTerm === "") {
     return persons.map((x) => {
       return (
         <li key={x.name}>
@@ -61,14 +61,14 @@ const Addpersons = ({
   return (
     <form onSubmit={handleSubmitted}>
       <div>
-        Name <input type='text' value={newName} onChange={handleChangeName} />
+        Name <input type="text" value={newName} onChange={handleChangeName} />
       </div>
       <div>
         Number
-        <input type='number' value={newNumber} onChange={handleChangeNumber} />
+        <input type="number" value={newNumber} onChange={handleChangeNumber} />
       </div>
       <div>
-        <button type='submit'>add</button>
+        <button type="submit">add</button>
       </div>
     </form>
   );
@@ -77,7 +77,7 @@ const Addpersons = ({
 const SearchBar = ({ searchTerm, handleSearchTerm }) => {
   return (
     <p>
-      filter shown with <input value={searchTerm} onChange={handleSearchTerm} />{' '}
+      filter shown with <input value={searchTerm} onChange={handleSearchTerm} />{" "}
     </p>
   );
 };
@@ -88,9 +88,9 @@ const Heading = ({ label }) => {
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState('');
-  const [newNumber, setnewNumber] = useState('');
-  const [searchTerm, setsearchTerm] = useState('');
+  const [newName, setNewName] = useState("");
+  const [newNumber, setnewNumber] = useState("");
+  const [searchTerm, setsearchTerm] = useState("");
 
   const handleChangeName = (event) => {
     setNewName(event.target.value);
@@ -120,12 +120,13 @@ const App = () => {
   const handleSubmitted = (event) => {
     event.preventDefault();
 
-    if (newName === '' || newNumber === '') {
-      return alert('Name or Number cannot be empty ! ');
+    if (newName === "" || newNumber === "") {
+      return alert("Name or Number cannot be empty ! ");
     }
 
     // if new name == a persons name in database then ask for repalce else dont ask for replace and add the person already
 
+    let isSamebeingAdded;
     var answer = persons.reduce((name, person) => {
       if (name) {
         return true;
@@ -136,6 +137,8 @@ const App = () => {
     console.log(``);
 
     if (answer === true) {
+      isSamebeingAdded = true;
+
       return window.confirm(
         `${event.target.value} is already added to phonebook you sure you want to replace with the new number ? `
       );
@@ -156,8 +159,8 @@ const App = () => {
         ])
       );
 
-    setNewName('');
-    setnewNumber('');
+    setNewName("");
+    setnewNumber("");
   };
 
   // picking initial data
@@ -169,7 +172,7 @@ const App = () => {
 
   return (
     <>
-      <Heading label={'PhoneBook'} />
+      <Heading label={"PhoneBook"} />
       <SearchBar searchTerm={searchTerm} handleSearchTerm={handleSearchTerm} />
       <Addpersons
         handleChangeName={handleChangeName}
@@ -178,7 +181,7 @@ const App = () => {
         newName={newName}
         newNumber={newNumber}
       />
-      <Heading label={'Numbers'} />
+      <Heading label={"Numbers"} />
       <ShowResults
         searchTerm={searchTerm}
         persons={persons}
