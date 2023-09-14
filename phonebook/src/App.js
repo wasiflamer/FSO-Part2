@@ -99,7 +99,7 @@ const App = () => {
       if (name) {
         return true;
       }
-      return person.name === event.target.value;
+      return person.name === capitalizeFLetter(event.target.value);
     }, false);
 
     if (answer === true) {
@@ -117,6 +117,12 @@ const App = () => {
     setsearchTerm(event.target.value);
   };
 
+  // Function to find the ID of a person by name
+  function findIdByName(nameToFind) {
+    const person = persons.find((person) => person.name === nameToFind);
+    return person ? person.id : null;
+  }
+
   const handleSubmitted = (event) => {
     event.preventDefault();
 
@@ -126,22 +132,32 @@ const App = () => {
 
     // if new name == a persons name in database then ask for repalce else dont ask for replace and add the person already
 
-    let isSamebeingAdded;
     var answer = persons.reduce((name, person) => {
       if (name) {
         return true;
       }
-      return person.name === event.target.value;
+      return person.name === capitalizeFLetter(newName);
     }, false);
 
-    console.log(``);
-
     if (answer === true) {
-      isSamebeingAdded = true;
-
-      return window.confirm(
-        `${event.target.value} is already added to phonebook you sure you want to replace with the new number ? `
+      let prompt_value = window.confirm(
+        `${newName} is already added to phonebook you sure you want to replace with the new number ${newNumber} ? `
       );
+
+      // send the put request to the server to replace .
+      if (prompt_value) {
+        let thatID = findIdByName(capitalizeFLetter(newName));
+        var newObject = {
+          name: capitalizeFLetter(newName),
+          number: newNumber,
+        };
+
+        return services.update(thatID, newObject).then((Response) =>
+          services.getAll().then((data) => {
+            setPersons(data);
+          })
+        );
+      }
     }
 
     // call the services here to add the new object to the setpersons state and cause a app component refresh
