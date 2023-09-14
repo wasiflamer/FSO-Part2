@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { useState, useEffect } from "react";
 
 import services from "./services/services";
@@ -5,6 +7,20 @@ import services from "./services/services";
 function capitalizeFLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+
+  if (message.includes("was added to the phonebook")) {
+    return <div className="success">{message}</div>;
+  } else if (message.includes("was updated in the phonebook")) {
+    return <div className="success">{message}</div>;
+  }
+
+  return <div className="error">{message}</div>;
+};
 
 const RemoveButton = ({ id, persons, setPersons }) => {
   const handleclick = () => {
@@ -91,6 +107,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setnewNumber] = useState("");
   const [searchTerm, setsearchTerm] = useState("");
+  const [Message, setMessage] = useState(null);
 
   const handleChangeName = (event) => {
     setNewName(event.target.value);
@@ -152,10 +169,16 @@ const App = () => {
           number: newNumber,
         };
 
-        return services.update(thatID, newObject).then((Response) =>
-          services.getAll().then((data) => {
-            setPersons(data);
-          })
+        return services.update(thatID, newObject).then(
+          (Response) =>
+            services.getAll().then((data) => {
+              setPersons(data);
+            }),
+
+          setMessage(`${newName} was updated in the phonebook`),
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000)
         );
       }
     }
@@ -166,14 +189,21 @@ const App = () => {
       number: newNumber,
     };
 
-    services
-      .create(newObject)
-      .then((Response) =>
+    services.create(newObject).then(
+      (Response) =>
+        // new object ( person ) added message here !
+        // call here
+
         setPersons([
           ...persons,
           { name: Response.name, number: Response.number, id: Response.id },
-        ])
-      );
+        ]),
+
+      setMessage(`${newName} was added to the phonebook`),
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000)
+    );
 
     setNewName("");
     setnewNumber("");
@@ -189,6 +219,7 @@ const App = () => {
   return (
     <>
       <Heading label={"PhoneBook"} />
+      <Notification message={Message} />
       <SearchBar searchTerm={searchTerm} handleSearchTerm={handleSearchTerm} />
       <Addpersons
         handleChangeName={handleChangeName}
