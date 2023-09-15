@@ -169,17 +169,29 @@ const App = () => {
           number: newNumber,
         };
 
-        return services.update(thatID, newObject).then(
-          (Response) =>
+        return services
+          .update(thatID, newObject)
+          .then(
+            (Response) =>
+              services.getAll().then((data) => {
+                setPersons(data);
+              }),
+
+            setMessage(`${newName} was updated in the phonebook`),
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000)
+          )
+          .catch((error) => {
+            setMessage(`${newName} was already deleted from the phonebook`);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+
             services.getAll().then((data) => {
               setPersons(data);
-            }),
-
-          setMessage(`${newName} was updated in the phonebook`),
-          setTimeout(() => {
-            setMessage(null);
-          }, 5000)
-        );
+            });
+          });
       }
     }
 
