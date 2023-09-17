@@ -93,7 +93,19 @@ const ShowResults = ({
 const App = () => {
   const [value, setValue] = useState("");
   const [data, setData] = useState([]);
+  const [countries, setcountries] = useState([]);
   const [WeatherData, setWeatherData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
+      .then((response) => {
+        setcountries(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [countries]);
 
   useEffect(() => {
     console.log("effect run, search term is now", value);
