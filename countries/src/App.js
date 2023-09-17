@@ -71,9 +71,38 @@ const ShowResults = ({
   data,
   WeatherData,
   setWeatherData,
+  setcountries,
+  countries,
+  filteredNames,
 }) => {
-  // if return data is not empty then return details otherwise empty div
-  if (Object.keys(data).length > 0) {
+  if (filteredNames[0].length > 1) {
+    return (
+      <ul>
+        {filteredNames[0].map((x) => (
+          <li key={x}>
+            {x} {<button>view details</button>}
+          </li>
+        ))}
+      </ul>
+    );
+
+    // return (
+    //   <DetailPanel
+    //     name={data.name["common"]}
+    //     capital={data.capital[0]}
+    //     area={data.area}
+    //     languages={data.languages}
+    //     img_src={data.flags["png"]}
+    //     WeatherData={WeatherData}
+    //     setWeatherData={setWeatherData}
+    //   />
+    // );
+  }
+  if (filteredNames[0].length >= 10) {
+    return <p>refine your search query ! </p>;
+  }
+
+  if (filteredNames[0].length === 1) {
     return (
       <DetailPanel
         name={data.name["common"]}
@@ -128,6 +157,18 @@ const App = () => {
     setValue(event.target.value);
   };
 
+  let list_of_all = [];
+  countries.forEach((element) => {
+    list_of_all.push(element.name["common"]);
+  });
+
+  const filteredNames = [];
+  filteredNames.push(
+    list_of_all.filter((x) => {
+      if (x.toLowerCase().includes(value.toLowerCase())) return x;
+    })
+  );
+
   return (
     <div>
       <form>
@@ -139,6 +180,9 @@ const App = () => {
         data={data}
         setWeatherData={setWeatherData}
         WeatherData={WeatherData}
+        countries={countries}
+        setcountries={setcountries}
+        filteredNames={filteredNames}
       />
     </div>
   );
