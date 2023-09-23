@@ -9,11 +9,13 @@ const DetailPanel = ({
   languages,
   setWeatherData,
   WeatherData,
+  the_ace_value,
 }) => {
   let api_key = process.env.REACT_APP_VITE_SOME_KEY;
 
   // fetch the weather data of the current country
   useEffect(() => {
+    console.log(` sxe ===  ${name}`);
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${api_key}&units=metric`
@@ -24,7 +26,7 @@ const DetailPanel = ({
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, [name]);
 
   return (
     <>
@@ -74,43 +76,41 @@ const ShowResults = ({
   setcountries,
   countries,
   filteredNames,
+  the_ace_value,
 }) => {
   // testing here !
-
-  console.table(filteredNames);
-
   useEffect(() => {
-    axios
-      .get(
-        `https://studies.cs.helsinki.fi/restcountries/api/name/${filteredNames[0]}`
-      )
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [searchTerm]);
+    if (the_ace_value.length != 0) {
+      axios
+        .get(
+          `https://studies.cs.helsinki.fi/restcountries/api/name/${the_ace_value}`
+        )
+        .then((response) => {
+          setData(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [the_ace_value]);
 
-  if (filteredNames[0].length > 1) {
-    if (filteredNames[0].length <= 10) {
+  if (the_ace_value.length > 1) {
+    if (the_ace_value.length <= 10) {
       return (
         <ul>
-          {filteredNames[0].map((x) => (
+          {the_ace_value.map((x) => (
             <li key={x}>
               {x} {<button>show</button>}
             </li>
           ))}
         </ul>
       );
+    } else if (the_ace_value.length >= 11) {
+      return <p>to many results refine query ! </p>;
     }
   }
 
-  if (filteredNames[0].length >= 11) {
-    return <p>to many results refine query ! </p>;
-  }
-
-  if (data.length != 0 && filteredNames[0].length == 1) {
+  if (data.length != 0 && the_ace_value.length == 1) {
     return (
       <DetailPanel
         name={data.name["common"]}
@@ -120,6 +120,7 @@ const ShowResults = ({
         img_src={data.flags["png"]}
         WeatherData={WeatherData}
         setWeatherData={setWeatherData}
+        the_ace_value={the_ace_value}
       />
     );
   }
@@ -154,11 +155,22 @@ const App = () => {
   });
 
   const filteredNames = [];
-  filteredNames.push(
-    list_of_all.filter((x) => {
-      if (x.toLowerCase().includes(value.toLowerCase())) return x;
-    })
-  );
+
+  if (value.length > 0) {
+    filteredNames.push(
+      list_of_all.filter((x) => {
+        if (x.toLowerCase().includes(value.toLowerCase())) return x;
+      })
+    );
+  }
+
+  let the_ace_value;
+
+  if (filteredNames.length === 0) {
+    the_ace_value = "";
+  } else {
+    the_ace_value = filteredNames[0];
+  }
 
   return (
     <div>
@@ -176,6 +188,7 @@ const App = () => {
         filteredNames={filteredNames}
         value={value}
         setValue={value}
+        the_ace_value={the_ace_value}
       />
     </div>
   );
