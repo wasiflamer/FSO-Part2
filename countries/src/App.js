@@ -75,34 +75,42 @@ const ShowResults = ({
   countries,
   filteredNames,
 }) => {
+  // testing here !
+
+  console.table(filteredNames);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://studies.cs.helsinki.fi/restcountries/api/name/${filteredNames[0]}`
+      )
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchTerm]);
+
   if (filteredNames[0].length > 1) {
-    return (
-      <ul>
-        {filteredNames[0].map((x) => (
-          <li key={x}>
-            {x} {<button>view details</button>}
-          </li>
-        ))}
-      </ul>
-    );
-
-    // return (
-    //   <DetailPanel
-    //     name={data.name["common"]}
-    //     capital={data.capital[0]}
-    //     area={data.area}
-    //     languages={data.languages}
-    //     img_src={data.flags["png"]}
-    //     WeatherData={WeatherData}
-    //     setWeatherData={setWeatherData}
-    //   />
-    // );
-  }
-  if (filteredNames[0].length >= 10) {
-    return <p>refine your search query ! </p>;
+    if (filteredNames[0].length <= 10) {
+      return (
+        <ul>
+          {filteredNames[0].map((x) => (
+            <li key={x}>
+              {x} {<button>show</button>}
+            </li>
+          ))}
+        </ul>
+      );
+    }
   }
 
-  if (filteredNames[0].length === 1) {
+  if (filteredNames[0].length >= 11) {
+    return <p>to many results refine query ! </p>;
+  }
+
+  if (data.length != 0 && filteredNames[0].length == 1) {
     return (
       <DetailPanel
         name={data.name["common"]}
@@ -136,23 +144,6 @@ const App = () => {
       });
   }, [countries]);
 
-  useEffect(() => {
-    console.log("effect run, search term is now", value);
-
-    // skip if currency is not defined
-    if (value) {
-      console.log("fetching countries ...");
-      axios
-        .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${value}`)
-        .then((response) => {
-          setData(response.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [value]);
-
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -183,6 +174,8 @@ const App = () => {
         countries={countries}
         setcountries={setcountries}
         filteredNames={filteredNames}
+        value={value}
+        setValue={value}
       />
     </div>
   );
