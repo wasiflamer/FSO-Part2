@@ -15,7 +15,6 @@ const DetailPanel = ({
 
   // fetch the weather data of the current country
   useEffect(() => {
-    console.log(` sxe ===  ${name}`);
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${api_key}&units=metric`
@@ -77,10 +76,12 @@ const ShowResults = ({
   countries,
   filteredNames,
   the_ace_value,
+  setsetsomething,
+  something,
 }) => {
   // testing here !
   useEffect(() => {
-    if (the_ace_value.length != 0) {
+    if (the_ace_value.length === 1) {
       axios
         .get(
           `https://studies.cs.helsinki.fi/restcountries/api/name/${the_ace_value}`
@@ -89,28 +90,16 @@ const ShowResults = ({
           setData(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          return console.log(err);
         });
     }
   }, [the_ace_value]);
 
-  if (the_ace_value.length > 1) {
-    if (the_ace_value.length <= 10) {
-      return (
-        <ul>
-          {the_ace_value.map((x) => (
-            <li key={x}>
-              {x} {<button>show</button>}
-            </li>
-          ))}
-        </ul>
-      );
-    } else if (the_ace_value.length >= 11) {
-      return <p>to many results refine query ! </p>;
-    }
-  }
+  const Handleclick = (e) => {
+    let foo = e.currentTarget.getAttribute("data-value");
+  };
 
-  if (data.length != 0 && the_ace_value.length == 1) {
+  if (data.length !== 0 && the_ace_value.length == 1) {
     return (
       <DetailPanel
         name={data.name["common"]}
@@ -125,6 +114,27 @@ const ShowResults = ({
     );
   }
 
+  if (the_ace_value.length > 1) {
+    if (the_ace_value.length <= 10) {
+      return (
+        <ul>
+          {the_ace_value.map((x) => (
+            <li key={x}>
+              {x}{" "}
+              {
+                <button onClick={Handleclick} data-value={x}>
+                  show
+                </button>
+              }
+            </li>
+          ))}
+        </ul>
+      );
+    } else if (the_ace_value.length >= 11) {
+      return <p>to many results refine query ! </p>;
+    }
+  }
+
   return <div></div>;
 };
 
@@ -133,16 +143,21 @@ const App = () => {
   const [data, setData] = useState([]);
   const [countries, setcountries] = useState([]);
   const [WeatherData, setWeatherData] = useState([]);
+  const [something, setsetsomething] = useState("");
+
+  let the_ace_value;
 
   useEffect(() => {
-    axios
-      .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
-      .then((response) => {
-        setcountries(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (the_ace_value.length === 0) {
+      axios
+        .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
+        .then((response) => {
+          setcountries(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [countries]);
 
   const handleChange = (event) => {
@@ -163,8 +178,6 @@ const App = () => {
       })
     );
   }
-
-  let the_ace_value;
 
   if (filteredNames.length === 0) {
     the_ace_value = "";
@@ -189,6 +202,8 @@ const App = () => {
         value={value}
         setValue={value}
         the_ace_value={the_ace_value}
+        setsetsomething={setsetsomething}
+        something={something}
       />
     </div>
   );
